@@ -1,4 +1,4 @@
-package com.cards.fourofakind;
+package com.cards.fourofakind.model;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,7 +12,6 @@ public class Pack {
 
     public Pack (String filename, int numberOfPlayer){
         this.pack = new Card[8 * numberOfPlayer];
-
         readPack(filename);
 //        shufflePack();
     }
