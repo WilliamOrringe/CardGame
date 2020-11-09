@@ -1,0 +1,4 @@
+Deck 4 contents: 3 13 9 2 
+Deck 4 contents: 13 9 2 6 
+Deck 4 contents: 9 2 6 7 
+Deck 4 contents: 2 6 7 6 

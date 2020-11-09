@@ -1,0 +1,16 @@
+Player 3 initial hand 2 4 6 7 
+Player 3 draws a 4 from deck 3
+Player 3 discards a 2 to deck 4
+Player 3 current hand is 4 4 6 7 
+Player 3 draws a 6 from deck 3
+Player 3 discards a 6 to deck 4
+Player 3 current hand is 4 4 6 7 
+Player 3 draws a 4 from deck 3
+Player 3 discards a 7 to deck 4
+Player 3 current hand is 4 4 4 6 
+Player 3 draws a 4 from deck 3
+Player 3 discards a 6 to deck 4
+Player 3 current hand is 4 4 4 4 
+Player 3 wins
+Player 3 exits
+Player 3 final hand: 4 4 4 4 
