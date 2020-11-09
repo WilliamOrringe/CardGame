@@ -16,7 +16,7 @@ install Java 8+
 ## Running the jar file
 Running the main application
 ```
-go the filepath in terminal
+go the filepath of the jar file in terminal
 ```
 ```
 java -jar CardGame.jar
