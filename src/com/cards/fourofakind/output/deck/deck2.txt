@@ -1,5 +1,5 @@
 Deck 2 contents: 2 10 15 2 
 Deck 2 contents: 10 15 2 3 
 Deck 2 contents: 15 2 3 6 
-Deck 2 contents: 2 3 6 10 
+Deck 2 contents: 2 3 6 
 Deck 2 contents: 3 6 10 

@@ -21,7 +21,7 @@ public class PlayerImpl implements Player {
     private int nextPlayerId;
 
     private static String winner;
-    private static String winingHand;
+    private static String winningHand;
 
     /**
      * Constructs an instance of the object containing playerNo argument.
@@ -91,7 +91,7 @@ public class PlayerImpl implements Player {
             while (!isStop.get()) {
                 if (hand.isWin()) {
                     winner = name;
-                    winingHand = hand.showHand();
+                    winningHand = hand.showHand();
                     isStop.compareAndSet(false, true);
                 } else {
                     hand.updateHandTimestamp();
@@ -139,7 +139,7 @@ public class PlayerImpl implements Player {
         if (winner.equals(name)) {
             writeToFile(writer, winner + " wins");
             writeToFile(writer, winner + " exits");
-            writeToFile(writer, winner + " final hand: " + winingHand);
+            writeToFile(writer, winner + " final hand: " + winningHand);
         } else {
             writeToFile(writer, winner + " has informed " + name + " that " + winner + " has won");
             writeToFile(writer, name + " exits");
