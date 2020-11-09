@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class Pack {
     private final Card[] pack;
@@ -17,9 +15,9 @@ public class Pack {
      * @param numberOfPlayer                number of players
      */
     public Pack (String filename, int numberOfPlayer){
+        //the size is always 8 * number of players
         this.pack = new Card[8 * numberOfPlayer];
         readPack(filename);
-//        shufflePack();
     }
 
     /**
@@ -30,8 +28,10 @@ public class Pack {
     private void readPack(String filename) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+            //reading all the lines in the file
             for (int line = 0; line < this.pack.length; line++) {
                 try {
+                    //adding to line to the array
                     this.pack[line] = new Card(Integer.parseInt(bufferedReader.readLine()));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -40,13 +40,6 @@ public class Pack {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Method to shuffle the pack of Card objects.
-     */
-    private void shufflePack() {
-        Collections.shuffle(Arrays.asList(this.pack));
     }
 
     /**

@@ -23,6 +23,7 @@ public class DeckImpl implements Deck {
      */
     @Override
     public synchronized Card getCard() {
+        //removes the head (first element) of the queue
         return this.cards.poll();
     }
 
@@ -45,6 +46,7 @@ public class DeckImpl implements Deck {
     public synchronized String showDeck() {
         StringBuilder deck = new StringBuilder();
         for (Card card : cards) {
+            //joining string
             deck.append(card.getValue()).append(" ");
         }
         return deck.toString();

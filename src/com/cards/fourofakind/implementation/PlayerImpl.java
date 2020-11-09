@@ -48,6 +48,7 @@ public class PlayerImpl implements Player {
      * Method to initialise player's hand by getting to first 4 cards from the deck.
      */
     public void initHand() {
+        //getting 4 cards from the deck
         for (int handIndex = 0; handIndex < 4; handIndex++) {
             hand.getHand()[handIndex] = (deck.getCard());
         }
@@ -81,46 +82,56 @@ public class PlayerImpl implements Player {
     public void start() {
         try {
             //initialing gameplay file.
-            String postfix = preferredCard.getValue() + ".txt";
             BufferedWriter gameplayWriter = new BufferedWriter(new FileWriter(
-                    "player" + postfix));
+                    "player" + preferredCard.getValue() + ".txt"));
             //initialing deck file.
-            BufferedWriter deckWriter = new BufferedWriter(new FileWriter("deck" + postfix));
+            BufferedWriter deckWriter = new BufferedWriter(new FileWriter(
+                    "deck" + preferredCard.getValue() + ".txt"));
 
             writeToFile(gameplayWriter, name + " initial hand " + hand.showHand());
+            //check weather of not isStop is true
             while (!isStop.get()) {
                 hand.updateHandTimestamp();
+                //check is the hand is a winning hand
                 if (hand.isWin()) {
                     winner = name;
                     winningHand = hand.showHand();
                     isStop.compareAndSet(false, true);
                 } else {
                     Card newCard = null;
+                    //checking weather the card is null and weather of not isStop is true
                     while (newCard == null && !isStop.get()) {
                         newCard = deck.getCard();
                         try {
+                            //thread sleeps for 10 milli-seconds
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-
+                    //check weather of not isStop is true
                     if (!isStop.get()) {
                         Card discardCard = hand.removeCard(preferredCard);
                         playerDeck.addCard(discardCard);
                         hand.addCard(newCard);
-                        //Writing player's gameplay to a file.
+                        //testing newCard is not null
                         assert newCard != null;
-                        writeToFile(gameplayWriter, name + " draws a " + newCard.getValue() + " from deck " + preferredCard.getValue());
-                        writeToFile(gameplayWriter, name + " discards a " + discardCard.getValue() + " to deck " + nextPlayerId);
+                        //Writing player's gameplay to a file.
+                        writeToFile(gameplayWriter, name + " draws a " + newCard.getValue() + " from deck "
+                                + preferredCard.getValue());
+                        writeToFile(gameplayWriter, name + " discards a " + discardCard.getValue()
+                                + " to deck " + nextPlayerId);
                         writeToFile(gameplayWriter, name + " current hand is " + hand.showHand());
 
-                        writeToFile(deckWriter, "Deck " + preferredCard.getValue() + " contents: " + deck.showDeck());
+                        writeToFile(deckWriter, "Deck " + preferredCard.getValue() + " contents: "
+                                + deck.showDeck());
                     }
                 }
             }
+            //closing the file writing object
             deckWriter.close();
             writeWinningStatement(gameplayWriter);
+            //closing the file writing object
             gameplayWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,7 +146,9 @@ public class PlayerImpl implements Player {
      */
     private void writeToFile(BufferedWriter writer, String text) {
         try {
+            //writing to a file
             writer.write(text);
+            //inserting new line to the file
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,6 +161,7 @@ public class PlayerImpl implements Player {
      * @param writer                BufferedWriter object
      */
     private void writeWinningStatement(BufferedWriter writer) {
+        //check weather the winner is the same as this player
         if (winner.equals(name)) {
             writeToFile(writer, winner + " wins");
             writeToFile(writer, winner + " exits");

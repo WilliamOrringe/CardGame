@@ -30,7 +30,9 @@ public class CardGame {
      */
     private void start() {
         List<CompletableFuture<Void>> completableFutures = new ArrayList<>();
+        //computing for all the player in the game
         for (PlayerImpl player : players) {
+            //allow the player to run independently in a synchronized manner
             completableFutures.add(CompletableFuture.runAsync(player::start));
         }
         CompletableFuture<Void> futures = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0]));
@@ -45,6 +47,7 @@ public class CardGame {
     private void createPlayers(int numberOfPlayer) {
         players = new PlayerImpl[numberOfPlayer];
         for (int playerIndex = 0; playerIndex < players.length; playerIndex++) {
+            //adding player objects to the array
             players[playerIndex] = new PlayerImpl(playerIndex + 1);
         }
     }
@@ -60,6 +63,7 @@ public class CardGame {
         int i = 0;
         for (Card card : pack.getPack()) {
             if (i < 8 * numberOfPlayer) {
+                //dealing cards to each player's deck
                 players[i % numberOfPlayer].getDeck().addCard(card);
                 i++;
             }
@@ -70,6 +74,7 @@ public class CardGame {
      * Method to initialise all the player's hand.
      */
     private void setPlayersInitialHand() {
+        //for all the players in the game
         for (PlayerImpl player : players) {
             player.initHand();
         }
@@ -80,6 +85,7 @@ public class CardGame {
      */
     private void setDiscardPlayerDeck() {
         for (int playerIndex = 0; playerIndex < players.length; playerIndex++) {
+            //check weather it's the last player
             if (playerIndex == players.length - 1) {
                 players[playerIndex].setNextPlayerDeck(players[0].getDeck());
                 players[playerIndex].setNextPlayerId(1);

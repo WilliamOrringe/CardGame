@@ -12,7 +12,8 @@ public class HandImpl implements Hand {
      * Constructs an instance of the object with no message.
      */
     public HandImpl() {
-       cards = new Card[4];
+        //hand will always have 4 elements
+        cards = new Card[4];
     }
 
     /**
@@ -22,6 +23,7 @@ public class HandImpl implements Hand {
      */
     @Override
     public void addCard(Card card) {
+        //adding card to the last position in the array
         cards[3] = card;
         sortHand();
     }
@@ -34,13 +36,16 @@ public class HandImpl implements Hand {
      */
     @Override
     public Card removeCard(Card preferredCard) {
+        //getting a list of least frequent cards
         List<Card> leastFrequentCards = leastFrequent(preferredCard);
         Card removedCard;
+        //checking weather the list of least frequent cards is empty
         if (leastFrequentCards.isEmpty()){
             removedCard = cards[getLongestWaitingCardIndex(Arrays.asList(cards), preferredCard)];
         } else {
             removedCard = leastFrequentCards.get(getLongestWaitingCardIndex(leastFrequentCards, preferredCard));
         }
+        //removes the card and make the index empty
         removingCard(removedCard);
         removedCard.resetTimestamp();
         return removedCard;
@@ -52,6 +57,7 @@ public class HandImpl implements Hand {
     @Override
     public void updateHandTimestamp() {
         for (Card card : cards) {
+            //incrementing the card's wait time
             card.updateTimestamp();
         }
     }
@@ -65,6 +71,7 @@ public class HandImpl implements Hand {
     public String showHand() {
         StringBuilder hand = new StringBuilder();
         for (Card card : cards) {
+            //joining string
             hand.append(card.getValue()).append(" ");
         }
         return hand.toString();
@@ -85,6 +92,7 @@ public class HandImpl implements Hand {
      */
     @Override
     public void sortHand() {
+        //sorting card objects by their value
         Arrays.sort(cards, Comparator.comparingInt(Card::getValue));
     }
 
@@ -96,6 +104,7 @@ public class HandImpl implements Hand {
     @Override
     public boolean isWin() {
         int value = cards[0].getValue();
+        //checks weather all the card value in the hand is the same
 	    return (value == cards[1].getValue()
             && value == cards[2].getValue()
             && value == cards[3].getValue());
@@ -115,19 +124,25 @@ public class HandImpl implements Hand {
 	    for (Card value : cards) {
 		    int tempCounter = 1;
 		    for (Card card : cards) {
+		        //checks weather the 2 cards are equal in value
 			    if (value.getValue() == card.getValue()) {
+			        //increment by 1
 				    tempCounter++;
 			    }
 		    }
 		    if (value.getValue() != preferredCard.getValue()) {
 			    if (counter == 0) {
 				    counter = tempCounter;
+				    //adding to the list
 				    leastFrequentCards.add(value);
 			    } else if (counter == tempCounter) {
+			        //adding to the list
 				    leastFrequentCards.add(value);
 			    } else if (tempCounter < counter) {
+			        //empty the list
 				    leastFrequentCards.clear();
 				    counter = tempCounter;
+				    //adding to the list
 				    leastFrequentCards.add(value);
 			    }
 		    }
@@ -146,6 +161,7 @@ public class HandImpl implements Hand {
         int index = -1;
 
         for (int cardIndex = 0; cardIndex < cards.size(); cardIndex++) {
+            //check to longest waiting card
             if (preferredCard.getValue() != cards.get(cardIndex).getValue()
                     && timestamp < cards.get(cardIndex).getTimestamp()) {
                 timestamp = cards.get(cardIndex).getTimestamp();
@@ -162,8 +178,10 @@ public class HandImpl implements Hand {
      */
     private void removingCard(Card value) {
         //removing all the null element in the array and removing the card from hand.
+        //array to ArrayList
         ArrayList<Card> temp = new ArrayList<>(Arrays.asList(cards));
         temp.remove(value);
+        //ArrayList to array
         cards = temp.toArray(cards);
     }
 }
