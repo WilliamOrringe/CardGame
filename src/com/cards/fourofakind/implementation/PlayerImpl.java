@@ -38,9 +38,9 @@ public class PlayerImpl implements Player {
     /**
      * Method to store next player's id in the round robin.
      *
-     * @param nextPlayerId              player id
+     * @param id              player id
      */
-    public void setNextPlayerId(int nextPlayerId) {
+    public void setNextPlayerId(int id) {
         this.nextPlayerId = nextPlayerId;
     }
 
