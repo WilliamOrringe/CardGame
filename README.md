@@ -13,11 +13,18 @@ install jdk
 install Java 8+
 ```
 
-## Running the tests
+## Running the jar file
 Running the main application
+```
+go the filepath in terminal
+```
+```
+java -jar CardGame.jar
+```
+The text files will be created in the same filepath as the jar file.
 
 ## Deployment
-Open the text files for each deck & player to see the programs gameplay.
+Open the text files for each deck & player to see the program's gameplay.
 
 ## Built With
 * Java
