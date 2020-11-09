@@ -6,6 +6,7 @@ import com.cards.fourofakind.implementation.PlayerImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 
 public class CardGame {
@@ -91,21 +92,20 @@ public class CardGame {
 
 
     public static void main(String[] args) {
-//        Scanner input = new Scanner(System.in);
-//
-//        int numberOfPlayer;
-//        do {
-//            System.out.println("Please enter the number of players: ");
-//            numberOfPlayer = input.nextInt();
-//        }while (numberOfPlayer < 1);
-//
-//        System.out.println("Please enter location of pack to load: ");
-//        String filename = input.next();
-//
-//        input.close();
-//
-//        CardGame game = new CardGame(numberOfPlayer, filename);
-        CardGame game = new CardGame(4, "four1.txt");
+        Scanner input = new Scanner(System.in);
+
+        int numberOfPlayer;
+        do {
+            System.out.println("Please enter the number of players: ");
+            numberOfPlayer = input.nextInt();
+        }while (numberOfPlayer < 1);
+
+        System.out.println("Please enter location of pack to load: ");
+        String filename = input.next();
+
+        input.close();
+
+        CardGame game = new CardGame(numberOfPlayer, filename);
         game.start();
     }
 }

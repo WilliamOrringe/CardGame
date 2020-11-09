@@ -81,12 +81,11 @@ public class PlayerImpl implements Player {
     public void start() {
         try {
             //initialing gameplay file.
-            String prefix = "src/com/cards/fourofakind/output/";
             String postfix = preferredCard.getValue() + ".txt";
             BufferedWriter gameplayWriter = new BufferedWriter(new FileWriter(
-                    prefix + "gameplay/player" + postfix));
+                    "player" + postfix));
             //initialing deck file.
-            BufferedWriter deckWriter = new BufferedWriter(new FileWriter(prefix + "deck/deck" + postfix));
+            BufferedWriter deckWriter = new BufferedWriter(new FileWriter("deck" + postfix));
 
             writeToFile(gameplayWriter, name + " initial hand " + hand.showHand());
             while (!isStop.get()) {
