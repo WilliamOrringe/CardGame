@@ -41,7 +41,7 @@ public class PlayerImpl implements Player {
      * @param id              player id
      */
     public void setNextPlayerId(int id) {
-        this.nextPlayerId = nextPlayerId;
+        this.nextPlayerId = id;
     }
 
     /**
@@ -81,30 +81,43 @@ public class PlayerImpl implements Player {
     public void start() {
         try {
             //initialing gameplay file.
-            BufferedWriter gameplayWriter = new BufferedWriter(new FileWriter("src/com/cards/fourofakind/output/gameplay/player" +
-                    preferredCard.getValue() + ".txt"));
+            String prefix = "src/com/cards/fourofakind/output/";
+            String postfix = preferredCard.getValue() + ".txt";
+            BufferedWriter gameplayWriter = new BufferedWriter(new FileWriter(
+                    prefix + "gameplay/player" + postfix));
             //initialing deck file.
-            BufferedWriter deckWriter = new BufferedWriter(new FileWriter("src/com/cards/fourofakind/output/deck/deck" +
-                    preferredCard.getValue() + ".txt"));
+            BufferedWriter deckWriter = new BufferedWriter(new FileWriter(prefix + "deck/deck" + postfix));
 
             writeToFile(gameplayWriter, name + " initial hand " + hand.showHand());
             while (!isStop.get()) {
+                hand.updateHandTimestamp();
                 if (hand.isWin()) {
                     winner = name;
                     winningHand = hand.showHand();
                     isStop.compareAndSet(false, true);
                 } else {
-                    hand.updateHandTimestamp();
-                    Card discardCard = hand.removeCard(preferredCard);
-                    Card newCard = deck.getCard();
-                    playerDeck.addCard(discardCard);
-                    hand.addCard(newCard);
-                    //Writing player's gameplay to a file.
-                    writeToFile(gameplayWriter, name + " draws a " + newCard.getValue() + " from deck " + preferredCard.getValue());
-                    writeToFile(gameplayWriter, name + " discards a " + discardCard.getValue() + " to deck " + nextPlayerId);
-                    writeToFile(gameplayWriter, name + " current hand is " + hand.showHand());
+                    Card newCard = null;
+                    while (newCard == null && !isStop.get()) {
+                        newCard = deck.getCard();
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                    writeToFile(deckWriter, "Deck " + preferredCard.getValue() + " contents: " + deck.showDeck());
+                    if (!isStop.get()) {
+                        Card discardCard = hand.removeCard(preferredCard);
+                        playerDeck.addCard(discardCard);
+                        hand.addCard(newCard);
+                        //Writing player's gameplay to a file.
+                        assert newCard != null;
+                        writeToFile(gameplayWriter, name + " draws a " + newCard.getValue() + " from deck " + preferredCard.getValue());
+                        writeToFile(gameplayWriter, name + " discards a " + discardCard.getValue() + " to deck " + nextPlayerId);
+                        writeToFile(gameplayWriter, name + " current hand is " + hand.showHand());
+
+                        writeToFile(deckWriter, "Deck " + preferredCard.getValue() + " contents: " + deck.showDeck());
+                    }
                 }
             }
             deckWriter.close();
@@ -119,7 +132,7 @@ public class PlayerImpl implements Player {
      * Method to write text to a text file.
      *
      * @param writer                BufferedWriter object
-     * @param text                  string of text that need to be writen
+     * @param text                  string of text that need to be written
      */
     private void writeToFile(BufferedWriter writer, String text) {
         try {

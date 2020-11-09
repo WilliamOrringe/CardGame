@@ -1,5 +1,18 @@
-Deck 2 contents: 2 10 15 2 
-Deck 2 contents: 10 15 2 3 
-Deck 2 contents: 15 2 3 6 
-Deck 2 contents: 2 3 6 
-Deck 2 contents: 3 6 10 
+Deck 2 contents: 5 1 5 2 
+Deck 2 contents: 1 5 2 4 
+Deck 2 contents: 5 2 4 7 
+Deck 2 contents: 2 4 7 
+Deck 2 contents: 4 7 6 
+Deck 2 contents: 7 6 2 4 
+Deck 2 contents: 6 2 4 5 
+Deck 2 contents: 2 4 5 3 
+Deck 2 contents: 4 5 3 3 
+Deck 2 contents: 5 3 3 2 
+Deck 2 contents: 3 3 2 8 
+Deck 2 contents: 3 2 8 8 
+Deck 2 contents: 2 8 8 6 
+Deck 2 contents: 8 8 6 6 
+Deck 2 contents: 8 6 6 2 
+Deck 2 contents: 6 6 2 6 
+Deck 2 contents: 6 2 6 7 
+Deck 2 contents: 2 6 7 7 

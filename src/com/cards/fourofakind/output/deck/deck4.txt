@@ -1,4 +1,18 @@
-Deck 4 contents: 3 13 9 2 
-Deck 4 contents: 13 9 2 6 
-Deck 4 contents: 9 2 6 7 
-Deck 4 contents: 2 6 7 6 
+Deck 4 contents: 2 1 6 
+Deck 4 contents: 1 6 6 7 
+Deck 4 contents: 6 6 7 
+Deck 4 contents: 6 7 7 
+Deck 4 contents: 7 7 4 2 
+Deck 4 contents: 7 4 2 6 
+Deck 4 contents: 4 2 6 4 
+Deck 4 contents: 2 6 4 7 
+Deck 4 contents: 6 4 7 8 
+Deck 4 contents: 4 7 8 8 
+Deck 4 contents: 7 8 8 1 
+Deck 4 contents: 8 8 1 5 
+Deck 4 contents: 8 1 5 4 
+Deck 4 contents: 1 5 4 7 
+Deck 4 contents: 5 4 7 6 
+Deck 4 contents: 4 7 6 5 
+Deck 4 contents: 7 6 5 5 
+Deck 4 contents: 6 5 5 4 

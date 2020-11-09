@@ -42,7 +42,7 @@ public class HandImpl implements Hand {
             removedCard = leastFrequentCards.get(getLongestWaitingCardIndex(leastFrequentCards, preferredCard));
         }
         removingCard(removedCard);
-        removedCard.resetTimeStamp();
+        removedCard.resetTimestamp();
         return removedCard;
     }
 
@@ -52,7 +52,7 @@ public class HandImpl implements Hand {
     @Override
     public void updateHandTimestamp() {
         for (Card card : cards) {
-            card.updateTimeStamp();
+            card.updateTimestamp();
         }
     }
 
@@ -85,7 +85,7 @@ public class HandImpl implements Hand {
      */
     @Override
     public void sortHand() {
-        Arrays.sort(cards, Comparator.nullsLast(Comparator.comparingInt(Card::getValue)));
+        Arrays.sort(cards, Comparator.comparingInt(Card::getValue));
     }
 
     /**
@@ -142,13 +142,13 @@ public class HandImpl implements Hand {
      * @return                          Card object's index
      */
     private int getLongestWaitingCardIndex(List<Card> cards, Card preferredCard) {
-        int timestamp = 0;
-        int index = 0;
+        int timestamp = -1;
+        int index = -1;
 
         for (int cardIndex = 0; cardIndex < cards.size(); cardIndex++) {
             if (preferredCard.getValue() != cards.get(cardIndex).getValue()
-                    && timestamp < cards.get(cardIndex).getTimeStamp()) {
-                timestamp = cards.get(cardIndex).getTimeStamp();
+                    && timestamp < cards.get(cardIndex).getTimestamp()) {
+                timestamp = cards.get(cardIndex).getTimestamp();
                 index = cardIndex;
             }
         }

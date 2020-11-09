@@ -27,21 +27,21 @@ public class Card {
      *
      * @return              timestamp of the card
      */
-    public int getTimeStamp() {
+    public int getTimestamp() {
         return timestamp;
     }
 
     /**
      * Method to update the card's timestamp.
      */
-    public void updateTimeStamp() {
+    public void updateTimestamp() {
         timestamp++;
     }
 
     /**
      * Method to reset the card's timestamp.
      */
-    public void resetTimeStamp() {
+    public void resetTimestamp() {
         timestamp = 0;
     }
 }

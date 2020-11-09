@@ -105,7 +105,7 @@ public class CardGame {
 //        input.close();
 //
 //        CardGame game = new CardGame(numberOfPlayer, filename);
-        CardGame game = new CardGame(4, "four.txt");
+        CardGame game = new CardGame(4, "four1.txt");
         game.start();
     }
 }
