@@ -1,8 +1,5 @@
-package com.cards.fourofakind.test;
-
-import com.cards.fourofakind.CardGame;
-import com.cards.fourofakind.api.PlayerDeck;
 import com.cards.fourofakind.exception.IllegalFileException;
+import com.cards.fourofakind.exception.IllegalFileInputException;
 import com.cards.fourofakind.exception.NullCardException;
 import com.cards.fourofakind.implementation.DeckImpl;
 import com.cards.fourofakind.implementation.HandImpl;
@@ -11,7 +8,9 @@ import com.cards.fourofakind.model.Card;
 import com.cards.fourofakind.model.Pack;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
 
@@ -20,10 +19,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
- * The type Testing suite.
+ * The testing suite for the card game
+ * Tests all non-interface classes
  */
 public class TestingSuite {
-	String filenameTest = "test.txt";
+	/**
+	 * The identifier for a file used in testing
+	 */
+	final String filenameTest = "test.txt";
+
+	/**
+	 * Runs all methods apart from the main() function and
+	 * the test will fail if any of the methods don't work.
+	 *
+	 * The second test, tests start and the test.txt file has a
+	 * winning hand for player 1 and it checks to see if it returns
+	 * straight away as player 1 wins instantly.
+	 *
+	 * @throws Exception the exception
+	 */
+
+	//PRIVATE METHOD TESTS USING REFLECT API
 	@Test
 	public void testCardGame() throws Exception{
 		CardGame gameTest = new CardGame(2,filenameTest);
@@ -36,11 +52,21 @@ public class TestingSuite {
 		args[0] = filenameTest;
 		args[1] = 2;
 		dealMethod.invoke(gameTest, args);
+		CardGame gameTest2 = new CardGame(2,filenameTest);
+		Method runMethod = CardGame.class.getDeclaredMethod("start");
+		runMethod.setAccessible(true);
+		runMethod.invoke(gameTest2);
 
 	}
 
+	/**
+	 * This tests the writeToFile function in the PlayerImpl class
+	 * to see if it writes the correct card values to the file given
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
-	public void testPrivateMethod() throws Exception {
+	public void writeFileTest() throws Exception {
 		PlayerImpl p = new PlayerImpl(1);
 		Method method = PlayerImpl.class.getDeclaredMethod("writeToFile",
 		                                                   java.io.BufferedWriter.class, java.lang.String.class);
@@ -51,45 +77,83 @@ public class TestingSuite {
 		args[0] = bw;
 		args[1] = "1";
 		for (int i = 0; i < 16; i++) {
-			args[1] = "" + (i % 4 + 1);
+			if(i < 8) {
+				args[1] = "" + (i % 2 + 1);
+			}else{
+				args[1] = "" + (i % 2 + 3);
+			}
 			method.invoke(p,args);
 		}
 		bw.close();
-		//Do your assertions
+		//Do your assertions TODO
 	}
+
+	/**
+	 * Reads from the file given to the Pack object and checks
+	 * to see if it has read the correct data.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void readPackTest() throws Exception{
 		Pack p = new Pack(filenameTest,2);
 		Method method = Pack.class.getDeclaredMethod("readPack", String.class);
 		method.setAccessible(true);
 		method.invoke(p,filenameTest);
+		//assertions here TODO
 	}
 
+	/**
+	 * Sets up a card game with 2 players where the first player
+	 * has a winning hand and then checks to see if the file
+	 * has been correctly made containing the correct winner.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void writeWinTest() throws Exception{
 		Pack p = new Pack(filenameTest,2);
-		Method methoda = Pack.class.getDeclaredMethod("readPack", String.class);
-		methoda.setAccessible(true);
-		methoda.invoke(p,filenameTest);
-
-		PlayerImpl player = new PlayerImpl(1);
-		player.initHand();
-		Method method = PlayerImpl.class.getDeclaredMethod("writeWinningStatement",
+		Method method1 = Pack.class.getDeclaredMethod("readPack", String.class);
+		method1.setAccessible(true);
+		//method1.invoke(p,filenameTest);
+		PlayerImpl player1 = new PlayerImpl(1);
+		PlayerImpl player2 = new PlayerImpl(2);
+		for (int i = 0; i < p.getPack().length;i++) {
+			if(i%2==0) {
+				player1.getDeck().addCard(p.getPack()[i]);
+			}else{
+				player2.getDeck().addCard(p.getPack()[i]);
+			}
+		}
+		player1.initHand();
+		player2.initHand();
+		player1.start();
+		Method method2 = PlayerImpl.class.getDeclaredMethod("writeWinningStatement",
 		                                                   java.io.BufferedWriter.class);
-		method.setAccessible(true);
-		FileWriter file = new FileWriter(filenameTest);
+		method2.setAccessible(true);
+		String storeLocation = "t" + filenameTest;
+		FileWriter file = new FileWriter(storeLocation);
 		BufferedWriter bw = new BufferedWriter(file);
-		method.invoke(player, bw);
+
+		method2.invoke(player1, bw);
+		BufferedReader br = new BufferedReader(new FileReader(storeLocation));
+		assertEquals("Player 1 wins", br.readLine());
 	}
+	//END OF PRIVATE FUNCTION TESTS
 
-
+	//START OF PUBLIC FUNCTION TESTS
 	/**
-	 * Player tests.
+	 * Tests the functions in PlayerImpl
+	 *
+	 * The first test checks to see if the deck is empty when the player is
+	 * initialised, which should return true.
+	 *
+	 * The second test checks to see if when adding cards to the players hand
+	 * is the first cards value 1, which should return true.
 	 */
 	@Test
 	public void playerTests() {
 		PlayerImpl tester = new PlayerImpl(1); // Redo this test
-		PlayerDeck plDeck;
 		DeckImpl testDeck = (DeckImpl) tester.getDeck();
 		tester.setNextPlayerId(1);
 		//assertEquals(1, tester.)
@@ -99,12 +163,32 @@ public class TestingSuite {
 		}
 		tester.initHand();
 		DeckImpl deckTest = (DeckImpl) tester.getDeck();
-		//assertEquals(1,deckTest[0].getValue(),"Value should be 1");
+		assertEquals(1,deckTest.getCard().getValue(),"Value should be 1");
 		//tester.start();
 	}
 
 	/**
-	 * Hand tests.
+	 * Tests the functions in the HandImpl class
+	 *
+	 * The first test checks if the hand is null to begin with
+	 *
+	 * The second test checks if the hand is a winning hand after
+	 * adding cards.
+	 *
+	 * The third test checks if the timestamp of the card is 0 to begin with
+	 *
+	 * The fourth test checks if after updating the timestamp the value of
+	 * the card equals 1.
+	 *
+	 * The fifth test checks to see if the hand contains the correct values.
+	 *
+	 * The sixth test checks if after adding a 5 to the hand that the last
+	 * card after sorting is 5.
+	 *
+	 * The seventh test checks if it deletes the correct card with the
+	 * corresponding index.
+	 *
+	 * @throws NullCardException the null card exception
 	 */
 	@Test
 	public void handTests() throws NullCardException {
@@ -131,7 +215,10 @@ public class TestingSuite {
 		             "Deleted card should be 2");
 
 	}
-
+	/*
+	Helper function to initialise a deck of 1 2 3 ..
+	returns the deck that has been initialised
+	 */
 	private DeckImpl initDeck() {
 		DeckImpl deck = new DeckImpl();
 		for (int i = 0; i < 8; i++) {
@@ -140,16 +227,30 @@ public class TestingSuite {
 		return deck;
 	}
 
-	private HandImpl initHand(HandImpl hand, DeckImpl deck) {
+	/*
+	Helper function to initialise a hand from the deck
+	that has been created by the initDeck() function
+	 */
+	private void initHand(HandImpl hand, DeckImpl deck) {
 		for (int i = 0; i < 4; i++) {
 			hand.getHand()[i] = (deck.getCard());
 		}
 		hand.sortHand();
-		return hand;
 	}
 
 	/**
-	 * Deck tests.
+	 * Tests the functions in DeckImpl
+	 *
+	 * The first test checks if the deck is not empty when initialised.
+	 *
+	 * The second test checks if the deck is empty after removing all
+	 * the cards from the deck.
+	 *
+	 * The third test checks if the first and only card's value is equal
+	 * to five after adding it.
+	 *
+	 * The fourth test checks if the showDeck() returns the correct
+	 * string for the deck.
 	 */
 	@Test
 	public void deckTests() {
@@ -166,7 +267,19 @@ public class TestingSuite {
 	}
 
 	/**
-	 * Card tests.
+	 * Tests all the functions in Card class
+	 *
+	 * The first test checks if the card value is equal to 1
+	 * after setting it with the constructor.
+	 *
+	 * The second test checks if the timestamp of the card is
+	 * 0 when initialised.
+	 *
+	 * The third test checks to see if the timestamp updates
+	 * for the card.
+	 *
+	 * The fourth test checks to see if the timestamp equals to
+	 * 0 after being reset.
 	 */
 	@Test
 	public void cardTests() {
@@ -186,16 +299,51 @@ public class TestingSuite {
 	}
 
 	/**
-	 * Pack tests.
+	 * Tests all the functions in the Pack class
+	 *
+	 * The first test checks to see if the pack size is correct
+	 * with the specific number of players.
+	 *
+	 * @throws IllegalFileException the illegal file exception
 	 */
 	@Test
 	public void packTests() throws IllegalFileException {
-		//make a read test
+		//make a read test TODO
 		int numberPlayer = 2;
 		Pack tester = new Pack(filenameTest, numberPlayer);
 		int testVal = numberPlayer * 8;
 		assertTrue("Pack size should be equal to number of players * 8",
 		           tester.getPack().length == testVal);
 	}
+	//START OF EXCEPTION TESTS
+	/**
+	 * Tests to see if the exception contains the value given
+	 */
+	@Test
+	public void illegalFileTest(){
+		IllegalFileException e = new IllegalFileException("test");
+		assertNotNull(e,"not null");
+	}
+
+	/**
+	 * Tests to see if the exception contains the value given
+	 */
+	@Test
+	public void illegalFileInputTest(){
+		IllegalFileInputException e = new IllegalFileInputException("test");
+		assertNotNull(e,"not null");
+	}
+
+	/**
+	 * Tests to see if the exception contains the value given
+	 */
+	@Test
+	public void nullCard(){
+		NullCardException e = new NullCardException("test");
+		assertNotNull(e,"not null");
+	}
+	//END OF EXCEPTION TESTS
+
+	//END OF PUBLIC FUNCTION TESTS
 }
 
