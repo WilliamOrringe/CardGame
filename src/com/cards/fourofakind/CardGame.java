@@ -1,5 +1,7 @@
 package com.cards.fourofakind;
 
+import com.cards.fourofakind.exception.IllegalFileException;
+import com.cards.fourofakind.exception.IllegalFileInputException;
 import com.cards.fourofakind.model.Card;
 import com.cards.fourofakind.model.Pack;
 import com.cards.fourofakind.implementation.PlayerImpl;
@@ -18,7 +20,7 @@ public class CardGame {
      * @param numberOfPlayer                number of players
      * @param filename                      name of text file
      */
-    public CardGame(int numberOfPlayer, String filename) {
+    public CardGame(int numberOfPlayer, String filename) throws IllegalFileException {
         createPlayers(numberOfPlayer);
         dealPack(filename, numberOfPlayer);
         setPlayersInitialHand();
@@ -58,7 +60,7 @@ public class CardGame {
      * @param filename                  text file
      * @param numberOfPlayer            number of player
      */
-    private void dealPack(String filename, int numberOfPlayer) {
+    private void dealPack(String filename, int numberOfPlayer) throws IllegalFileException {
         Pack pack = new Pack(filename, numberOfPlayer);
         int i = 0;
         for (Card card : pack.getPack()) {
@@ -97,9 +99,8 @@ public class CardGame {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalFileInputException, IllegalFileException {
         Scanner input = new Scanner(System.in);
-
         int numberOfPlayer;
         do {
             System.out.println("Please enter the number of players: ");
@@ -108,6 +109,10 @@ public class CardGame {
 
         System.out.println("Please enter location of pack to load: ");
         String filename = input.next();
+
+        if (!filename.endsWith(".txt")){
+            throw new IllegalFileInputException("Illegal File Input: The inputted file isn't a text file.");
+        }
 
         input.close();
 

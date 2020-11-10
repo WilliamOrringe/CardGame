@@ -4,6 +4,7 @@ import com.cards.fourofakind.api.Deck;
 import com.cards.fourofakind.api.Hand;
 import com.cards.fourofakind.api.Player;
 import com.cards.fourofakind.api.PlayerDeck;
+import com.cards.fourofakind.exception.NullCardException;
 import com.cards.fourofakind.model.Card;
 
 import java.io.BufferedWriter;
@@ -133,7 +134,7 @@ public class PlayerImpl implements Player {
             writeWinningStatement(gameplayWriter);
             //closing the file writing object
             gameplayWriter.close();
-        } catch (IOException e) {
+        } catch (IOException | NullCardException e) {
             e.printStackTrace();
         }
     }

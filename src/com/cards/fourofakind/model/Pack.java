@@ -1,5 +1,7 @@
 package com.cards.fourofakind.model;
 
+import com.cards.fourofakind.exception.IllegalFileException;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,7 +16,7 @@ public class Pack {
      * @param filename                      name of text file
      * @param numberOfPlayer                number of players
      */
-    public Pack (String filename, int numberOfPlayer){
+    public Pack (String filename, int numberOfPlayer) throws IllegalFileException {
         //the size is always 8 * number of players
         this.pack = new Card[8 * numberOfPlayer];
         readPack(filename);
@@ -25,19 +27,22 @@ public class Pack {
      *
      * @param filename          name of text file
      */
-    private void readPack(String filename) {
+    private void readPack(String filename) throws IllegalFileException {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
             //reading all the lines in the file
             for (int line = 0; line < this.pack.length; line++) {
-                try {
-                    //adding to line to the array
-                    this.pack[line] = new Card(Integer.parseInt(bufferedReader.readLine()));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                String content = bufferedReader.readLine();
+                if (content == null) {
+                    throw new IllegalFileException("Illegal File: The file needs to contain (8 * number of player) " +
+                            "lines.");
+                } else if (content.equals("")) {
+                    throw new IllegalFileException("Illegal File: One of the line in the file is empty.");
                 }
+                //adding to line to the array
+                this.pack[line] = new Card(Integer.parseInt(content));
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

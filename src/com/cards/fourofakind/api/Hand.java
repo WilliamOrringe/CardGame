@@ -1,5 +1,6 @@
 package com.cards.fourofakind.api;
 
+import com.cards.fourofakind.exception.NullCardException;
 import com.cards.fourofakind.model.Card;
 
 public interface Hand {
@@ -8,7 +9,7 @@ public interface Hand {
      *
      * @param card          Card object
      */
-    void addCard(Card card);
+    void addCard(Card card) throws NullCardException;
 
     /**
      * Method to remove a Card object from hand, which isn't the preferredCard.

@@ -16,10 +16,10 @@ install Java 8+
 ## Running the jar file
 Running the main application
 ```
-go the filepath of the jar file in terminal
+cd CardGame
 ```
 ```
-java -jar CardGame.jar
+java -jar cards.jar
 ```
 The text files will be created in the same filepath as the jar file.
 

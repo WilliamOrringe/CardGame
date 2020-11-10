@@ -1,6 +1,7 @@
 package com.cards.fourofakind.implementation;
 
 import com.cards.fourofakind.api.Hand;
+import com.cards.fourofakind.exception.NullCardException;
 import com.cards.fourofakind.model.Card;
 
 import java.util.*;
@@ -22,7 +23,10 @@ public class HandImpl implements Hand {
      * @param card          Card object
      */
     @Override
-    public void addCard(Card card) {
+    public void addCard(Card card) throws NullCardException {
+        if (card == null) {
+            throw new NullCardException("Null Card: Last added card to the hand is null");
+        }
         //adding card to the last position in the array
         cards[3] = card;
         sortHand();
