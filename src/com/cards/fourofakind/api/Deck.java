@@ -11,7 +11,7 @@ public interface Deck extends PlayerDeck{
     Card getCard();
 
     /**
-     * Method to represent weather the Deck is empty.
+     * Method to represent whether the Deck is empty.
      *
      * @return          if the Deck is empty
      */

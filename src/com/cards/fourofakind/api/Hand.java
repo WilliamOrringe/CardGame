@@ -44,9 +44,9 @@ public interface Hand {
     void sortHand();
 
     /**
-     * Method used to indicate weather or not the hand is a winning hand.
+     * Method used to indicate whether or not the hand is a winning hand.
      *
-     * @return              weather or not the hand is a winning hand
+     * @return              whether or not the hand is a winning hand
      */
     boolean isWin();
 }

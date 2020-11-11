@@ -28,7 +28,7 @@ public class DeckImpl implements Deck {
     }
 
     /**
-     * Method to represent weather the Deck is empty.
+     * Method to represent whether the Deck is empty.
      *
      * @return          if the Deck is empty
      */

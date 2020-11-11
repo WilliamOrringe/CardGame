@@ -3,12 +3,11 @@ package com.cards.fourofakind.model;
 import com.cards.fourofakind.exception.IllegalFileException;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Pack {
-    private final Card[] pack;
+    private final Card[] cards;
 
     /**
      * Constructs an instance of the object containing filename and numberOfPlayer arguments.
@@ -18,7 +17,7 @@ public class Pack {
      */
     public Pack (String filename, int numberOfPlayer) throws IllegalFileException {
         //the size is always 8 * number of players
-        this.pack = new Card[8 * numberOfPlayer];
+        this.cards = new Card[8 * numberOfPlayer];
         readPack(filename);
     }
 
@@ -31,7 +30,7 @@ public class Pack {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
             //reading all the lines in the file
-            for (int line = 0; line < this.pack.length; line++) {
+            for (int line = 0; line < this.cards.length; line++) {
                 String content = bufferedReader.readLine();
                 if (content == null) {
                     throw new IllegalFileException("Illegal File: The file needs to contain (8 * number of player) " +
@@ -40,7 +39,7 @@ public class Pack {
                     throw new IllegalFileException("Illegal File: One of the line in the file is empty.");
                 }
                 //adding to line to the array
-                this.pack[line] = new Card(Integer.parseInt(content));
+                this.cards[line] = new Card(Integer.parseInt(content));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,7 +51,7 @@ public class Pack {
      *
      * @return          array of Card objects
      */
-    public Card[] getPack() {
-        return this.pack;
+    public Card[] getCards() {
+        return this.cards;
     }
 }

@@ -63,7 +63,7 @@ public class CardGame {
     private void dealPack(String filename, int numberOfPlayer) throws IllegalFileException {
         Pack pack = new Pack(filename, numberOfPlayer);
         int i = 0;
-        for (Card card : pack.getPack()) {
+        for (Card card : pack.getCards()) {
             if (i < 8 * numberOfPlayer) {
                 //dealing cards to each player's deck
                 players[i % numberOfPlayer].getDeck().addCard(card);
@@ -87,7 +87,7 @@ public class CardGame {
      */
     private void setDiscardPlayerDeck() {
         for (int playerIndex = 0; playerIndex < players.length; playerIndex++) {
-            //check weather it's the last player
+            //check whether it's the last player
             if (playerIndex == players.length - 1) {
                 players[playerIndex].setNextPlayerDeck(players[0].getDeck());
                 players[playerIndex].setNextPlayerId(1);

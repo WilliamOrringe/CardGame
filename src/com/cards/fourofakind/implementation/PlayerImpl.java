@@ -17,12 +17,13 @@ public class PlayerImpl implements Player {
     private final Card preferredCard;
     private final Hand hand;
     private final Deck deck;
-    private final static AtomicBoolean isStop = new AtomicBoolean(false);
+
     private PlayerDeck playerDeck;
     private int nextPlayerId;
-
     private static String winner;
     private static String winningHand;
+
+    private final static AtomicBoolean isStop = new AtomicBoolean(false);
 
     /**
      * Constructs an instance of the object containing playerNo argument.
@@ -90,7 +91,7 @@ public class PlayerImpl implements Player {
                     "deck" + preferredCard.getValue() + ".txt"));
 
             writeToFile(gameplayWriter, name + " initial hand " + hand.showHand());
-            //check weather of not isStop is true
+            //check whether of not isStop is true
             while (!isStop.get()) {
                 hand.updateHandTimestamp();
                 //check is the hand is a winning hand
@@ -100,17 +101,13 @@ public class PlayerImpl implements Player {
                     isStop.compareAndSet(false, true);
                 } else {
                     Card newCard = null;
-                    //checking weather the card is null and weather of not isStop is true
+                    //checking whether the card is null and whether of not isStop is true
                     while (newCard == null && !isStop.get()) {
                         newCard = deck.getCard();
-                        try {
-                            //thread sleeps for 10 milli-seconds
-                            Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        //thread sleeps for 10 milli-seconds
+                        Thread.sleep(10);
                     }
-                    //check weather of not isStop is true
+                    //check whether of not isStop is true
                     if (!isStop.get()) {
                         Card discardCard = hand.removeCard(preferredCard);
                         playerDeck.addCard(discardCard);
@@ -134,7 +131,7 @@ public class PlayerImpl implements Player {
             writeWinningStatement(gameplayWriter);
             //closing the file writing object
             gameplayWriter.close();
-        } catch (IOException | NullCardException e) {
+        } catch (IOException | InterruptedException | NullCardException e) {
             e.printStackTrace();
         }
     }
@@ -162,7 +159,7 @@ public class PlayerImpl implements Player {
      * @param writer                BufferedWriter object
      */
     private void writeWinningStatement(BufferedWriter writer) {
-        //check weather the winner is the same as this player
+        //check whether the winner is the same as this player
         if (winner.equals(name)) {
             writeToFile(writer, winner + " wins");
             writeToFile(writer, winner + " exits");
