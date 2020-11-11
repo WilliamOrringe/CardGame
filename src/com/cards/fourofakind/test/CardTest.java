@@ -45,28 +45,43 @@ public class CardTest {
 	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
 	 * @throws IllegalAccessException the currently executing method does not have access to the
 	 * definition of the specified class, field, method or constructor.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred.
 	 */
 
 	//PRIVATE METHOD TESTS USING REFLECT API
 	@Test
 	public void testCardGame() throws IllegalFileException, NoSuchMethodException,
-			InvocationTargetException, IllegalAccessException {
+			InvocationTargetException, IllegalAccessException, IOException {
 		CardGame gameTest = new CardGame(2,FILE_NAME);
 		Method method = CardGame.class.getDeclaredMethod("createPlayers", int.class);
 		method.setAccessible(true);
 		method.invoke(gameTest,2);
+
 		Method dealMethod = CardGame.class.getDeclaredMethod("dealPack", String.class, int.class);
 		dealMethod.setAccessible(true);
 		Object[] args = new Object[2];
 		args[0] = FILE_NAME;
 		args[1] = 2;
 		dealMethod.invoke(gameTest, args);
+
 		File file = new File(FILE_NAME);
 		assertTrue("File must exist",file.exists());
 		CardGame gameTest2 = new CardGame(2,FILE_NAME);
 		Method runMethod = CardGame.class.getDeclaredMethod("start");
 		runMethod.setAccessible(true);
 		runMethod.invoke(gameTest2);
+
+		try (BufferedReader br = new BufferedReader(new FileReader("player1.txt"))) {
+			Assert.assertEquals("Player 1 initial hand 1 1 1 1 ", br.readLine());
+			br.readLine();
+			Assert.assertEquals("Player 1 exits", br.readLine());
+		}
+		try (BufferedReader br = new BufferedReader(new FileReader("player2.txt"))) {
+			Assert.assertEquals("Player 2 initial hand 2 2 2 2 ", br.readLine());
+			br.readLine();
+			Assert.assertEquals("Player 2 exits", br.readLine());
+		}
+
 	}
 
 	/**
