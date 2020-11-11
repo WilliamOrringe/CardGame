@@ -8,10 +8,7 @@ import com.cards.fourofakind.model.Card;
 import com.cards.fourofakind.model.Pack;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.lang.reflect.Method;
 
 import static org.junit.Assert.assertTrue;
@@ -22,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * The testing suite for the card game
  * Tests all non-interface classes
  */
-public class TestingSuite {
+class TestingSuite {
 	/**
 	 * The identifier for a file used in testing
 	 */
@@ -32,16 +29,18 @@ public class TestingSuite {
 	 * Runs all methods apart from the main() function and
 	 * the test will fail if any of the methods don't work.
 	 *
-	 * The second test, tests start and the test.txt file has a
-	 * winning hand for player 1 and it checks to see if it returns
-	 * straight away as player 1 wins instantly.
+	 * The first test checks if the file exist after attempting to read
+	 * from it.
+	 *
+	 * The other functions test the inner functionality of this class
+	 * by testing every other function.
 	 *
 	 * @throws Exception the exception
 	 */
 
 	//PRIVATE METHOD TESTS USING REFLECT API
 	@Test
-	public void testCardGame() throws Exception{
+	void testCardGame() throws Exception{
 		CardGame gameTest = new CardGame(2,filenameTest);
 		Method method = CardGame.class.getDeclaredMethod("createPlayers", int.class);
 		method.setAccessible(true);
@@ -52,21 +51,27 @@ public class TestingSuite {
 		args[0] = filenameTest;
 		args[1] = 2;
 		dealMethod.invoke(gameTest, args);
+		File file = new File(filenameTest);
+		assertTrue("File must exist",file.exists());
 		CardGame gameTest2 = new CardGame(2,filenameTest);
 		Method runMethod = CardGame.class.getDeclaredMethod("start");
 		runMethod.setAccessible(true);
 		runMethod.invoke(gameTest2);
-
 	}
 
 	/**
 	 * This tests the writeToFile function in the PlayerImpl class
 	 * to see if it writes the correct card values to the file given
 	 *
+	 * The first test checks to see if the file exists after the
+	 * writer has attempted to make it.
+	 *
+	 * The second test checks to see if the file is readable so
+	 * that the pack will be able to be made from the file.
 	 * @throws Exception the exception
 	 */
 	@Test
-	public void writeFileTest() throws Exception {
+	void writeFileTest() throws Exception {
 		PlayerImpl p = new PlayerImpl(1);
 		Method method = PlayerImpl.class.getDeclaredMethod("writeToFile",
 		                                                   java.io.BufferedWriter.class, java.lang.String.class);
@@ -75,7 +80,6 @@ public class TestingSuite {
 		BufferedWriter bw = new BufferedWriter(file);
 		Object[] args =new Object[2];
 		args[0] = bw;
-		args[1] = "1";
 		for (int i = 0; i < 16; i++) {
 			if(i < 8) {
 				args[1] = "" + (i % 2 + 1);
@@ -85,7 +89,9 @@ public class TestingSuite {
 			method.invoke(p,args);
 		}
 		bw.close();
-		//Do your assertions TODO
+		File testFile = new File(filenameTest);
+		assertTrue("File should exist",testFile.exists());
+		assertTrue("File should be readable",testFile.canRead());
 	}
 
 	/**
@@ -95,12 +101,12 @@ public class TestingSuite {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public void readPackTest() throws Exception{
+	void readPackTest() throws Exception{
 		Pack p = new Pack(filenameTest,2);
 		Method method = Pack.class.getDeclaredMethod("readPack", String.class);
 		method.setAccessible(true);
 		method.invoke(p,filenameTest);
-		//assertions here TODO
+		assertEquals(1,p.getPack()[0].getValue(),"Value should be 1");
 	}
 
 	/**
@@ -111,11 +117,10 @@ public class TestingSuite {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public void writeWinTest() throws Exception{
+	void writeWinTest() throws Exception{
 		Pack p = new Pack(filenameTest,2);
 		Method method1 = Pack.class.getDeclaredMethod("readPack", String.class);
 		method1.setAccessible(true);
-		//method1.invoke(p,filenameTest);
 		PlayerImpl player1 = new PlayerImpl(1);
 		PlayerImpl player2 = new PlayerImpl(2);
 		for (int i = 0; i < p.getPack().length;i++) {
@@ -136,6 +141,7 @@ public class TestingSuite {
 		BufferedWriter bw = new BufferedWriter(file);
 
 		method2.invoke(player1, bw);
+		bw.close();
 		BufferedReader br = new BufferedReader(new FileReader(storeLocation));
 		assertEquals("Player 1 wins", br.readLine());
 	}
@@ -152,11 +158,10 @@ public class TestingSuite {
 	 * is the first cards value 1, which should return true.
 	 */
 	@Test
-	public void playerTests() {
-		PlayerImpl tester = new PlayerImpl(1); // Redo this test
+	void playerTests() {
+		PlayerImpl tester = new PlayerImpl(1);
 		DeckImpl testDeck = (DeckImpl) tester.getDeck();
 		tester.setNextPlayerId(1);
-		//assertEquals(1, tester.)
 		assertTrue("Deck is empty",testDeck.isEmpty());
 		for (int counter = 0; counter < 8; counter++) {
 			tester.getDeck().addCard(new Card((counter+1)%4));
@@ -164,7 +169,6 @@ public class TestingSuite {
 		tester.initHand();
 		DeckImpl deckTest = (DeckImpl) tester.getDeck();
 		assertEquals(1,deckTest.getCard().getValue(),"Value should be 1");
-		//tester.start();
 	}
 
 	/**
@@ -191,7 +195,7 @@ public class TestingSuite {
 	 * @throws NullCardException the null card exception
 	 */
 	@Test
-	public void handTests() throws NullCardException {
+	void handTests() throws NullCardException {
 		HandImpl tester = new HandImpl();
 		DeckImpl deck = initDeck();
 		assertNull(tester.getHand()[0], "Hand should be empty to begin with");
@@ -253,7 +257,7 @@ public class TestingSuite {
 	 * string for the deck.
 	 */
 	@Test
-	public void deckTests() {
+	void deckTests() {
 		DeckImpl tester = initDeck();
 		assertFalse(tester.isEmpty(), "Deck is not empty when initialised");
 		for (int counter = 0; counter < 8; counter++) {
@@ -282,7 +286,7 @@ public class TestingSuite {
 	 * 0 after being reset.
 	 */
 	@Test
-	public void cardTests() {
+	void cardTests() {
 		Card tester = new Card(1);
 
 		assertEquals(1, tester.getValue(), "Card value is equal to 1");
@@ -304,23 +308,36 @@ public class TestingSuite {
 	 * The first test checks to see if the pack size is correct
 	 * with the specific number of players.
 	 *
+	 * The second test checks to see if the pack contains the
+	 * correct data after reading from the test file.
 	 * @throws IllegalFileException the illegal file exception
 	 */
 	@Test
-	public void packTests() throws IllegalFileException {
-		//make a read test TODO
+	void packTests() throws IllegalFileException {
 		int numberPlayer = 2;
 		Pack tester = new Pack(filenameTest, numberPlayer);
 		int testVal = numberPlayer * 8;
-		assertTrue("Pack size should be equal to number of players * 8",
-		           tester.getPack().length == testVal);
+		assertEquals(testVal, tester.getPack().length,"Pack size should be equal to number of " +
+		                                              "players * 8");
+		Card[] expected = new Card[16];
+		for (int i = 0; i < 16; i++) {
+			if (i < 8) {
+				expected[i] = new Card(i % 2 + 1);
+			} else {
+				expected[i] = new Card(i % 2 + 3);
+			}
+		}
+		for (int counter = 0; counter < expected.length; counter++) {
+			assertEquals(expected[counter].getValue(),tester.getPack()[counter].getValue()
+					,"Values should match");
+		}
 	}
 	//START OF EXCEPTION TESTS
 	/**
 	 * Tests to see if the exception contains the value given
 	 */
 	@Test
-	public void illegalFileTest(){
+	void illegalFileTest(){
 		IllegalFileException e = new IllegalFileException("test");
 		assertNotNull(e,"not null");
 	}
@@ -329,7 +346,7 @@ public class TestingSuite {
 	 * Tests to see if the exception contains the value given
 	 */
 	@Test
-	public void illegalFileInputTest(){
+	void illegalFileInputTest(){
 		IllegalFileInputException e = new IllegalFileInputException("test");
 		assertNotNull(e,"not null");
 	}
@@ -338,7 +355,7 @@ public class TestingSuite {
 	 * Tests to see if the exception contains the value given
 	 */
 	@Test
-	public void nullCard(){
+	void nullCard(){
 		NullCardException e = new NullCardException("test");
 		assertNotNull(e,"not null");
 	}
