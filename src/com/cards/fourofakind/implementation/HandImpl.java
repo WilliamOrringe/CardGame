@@ -43,7 +43,7 @@ public class HandImpl implements Hand {
         //getting a list of least frequent cards
         List<Card> leastFrequentCards = leastFrequent(preferredCard);
         Card removedCard;
-        //checking weather the list of least frequent cards is empty
+        //checking whether the list of least frequent cards is empty
         if (leastFrequentCards.isEmpty()){
             removedCard = cards[getLongestWaitingCardIndex(Arrays.asList(cards), preferredCard)];
         } else {
@@ -101,14 +101,14 @@ public class HandImpl implements Hand {
     }
 
     /**
-     * Method used to indicate weather or not the hand is a winning hand.
+     * Method used to indicate whether or not the hand is a winning hand.
      *
-     * @return              weather or not the hand is a winning hand
+     * @return              whether or not the hand is a winning hand
      */
     @Override
     public boolean isWin() {
         int value = cards[0].getValue();
-        //checks weather all the card value in the hand is the same
+        //checks whether all the card value in the hand is the same
 	    return (value == cards[1].getValue()
             && value == cards[2].getValue()
             && value == cards[3].getValue());
@@ -128,7 +128,7 @@ public class HandImpl implements Hand {
 	    for (Card value : cards) {
 		    int tempCounter = 1;
 		    for (Card card : cards) {
-		        //checks weather the 2 cards are equal in value
+		        //checks whether the 2 cards are equal in value
 			    if (value.getValue() == card.getValue()) {
 			        //increment by 1
 				    tempCounter++;
