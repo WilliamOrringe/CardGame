@@ -88,11 +88,7 @@ public class CardTest {
 	 * This tests the writeToFile function in the PlayerImpl class
 	 * to see if it writes the correct card values to the file given
 	 *
-	 * The first test checks to see if the file exists after the
-	 * writer has attempted to make it.
-	 *
-	 * The second test checks to see if the file is readable so
-	 * that the pack will be able to be made from the file.
+	 * The first test checks to see if the file contains the correct values.
 	 *
 	 * @throws NoSuchMethodException Thrown when a particular method cannot be found.
 	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
@@ -110,19 +106,24 @@ public class CardTest {
 		FileWriter file = new FileWriter(FILE_NAME);
 		BufferedWriter bw = new BufferedWriter(file);
 		Object[] args =new Object[2];
+		String[] checkValues = new String[16];
 		args[0] = bw;
 		for (int i = 0; i < 16; i++) {
 			if(i < 8) {
+				checkValues[i] = "" + (i % 2 + 1);
 				args[1] = "" + (i % 2 + 1);
 			}else{
+				checkValues[i] = "" + (i % 2 + 3);
 				args[1] = "" + (i % 2 + 3);
-			}
+				}
 			method.invoke(p,args);
 		}
 		bw.close();
-		File testFile = new File(FILE_NAME);
-		assertTrue("File should exist",testFile.exists());
-		assertTrue("File should be readable",testFile.canRead());
+		try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+			for (int counter = 0; counter < 16; counter++) {
+				Assert.assertEquals(checkValues[counter],br.readLine());
+			}
+		}
 	}
 
 	/**
